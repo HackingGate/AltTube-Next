@@ -1,13 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const NavBar = () => {
   const [searchQuery, setSearchQuery] = useState('')
+  const router = useRouter()
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log('Searching for', searchQuery)
+    router.push(`/results?search_query=${encodeURIComponent(searchQuery)}`) // Navigate to results page with search query
   }
 
   return (
