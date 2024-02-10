@@ -9,7 +9,7 @@ const NavBar = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Searching for', searchQuery)
+    if (searchQuery.trim() === '') return // Don't search if the query is empty
     router.push(`/results?search_query=${encodeURIComponent(searchQuery)}`) // Navigate to results page with search query
   }
 
