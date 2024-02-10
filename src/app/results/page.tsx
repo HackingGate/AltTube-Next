@@ -3,12 +3,21 @@
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { Suspense } from 'react'
 
 type SearchResults = {
   items: Array<any>
 }
 
 export default function Results() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResultsInner />
+    </Suspense>
+  )
+}
+
+function ResultsInner() {
   const searchParams = useSearchParams()
   const search_query = searchParams.get('search_query')
 
