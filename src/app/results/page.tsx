@@ -46,7 +46,8 @@ function ResultsInner() {
   return (
     <div>
       <h1>Results for {search_query}</h1>
-      {searchResults.items.length > 0 &&
+      {searchResults.items &&
+        searchResults.items.length > 0 &&
         searchResults.items.map((result, index) => (
           <div className={'mt-4 p-4'} key={index}>
             <Image
