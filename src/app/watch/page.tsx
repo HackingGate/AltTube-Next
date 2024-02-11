@@ -1,5 +1,3 @@
 export default function Watch() {
-  return (
-    <h1>Hello, Watch!</h1>
-  )
+  return <h1>Hello, Watch!</h1>
 }
