@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Suspense } from 'react'
+import Link from 'next/link'
 
 type SearchResults = {
   items: Array<any>
@@ -49,15 +50,17 @@ function ResultsInner() {
       {searchResults.items &&
         searchResults.items.length > 0 &&
         searchResults.items.map((result, index) => (
-          <div className={'mt-4 p-4'} key={index}>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_API_URL}${result.thumbnail}`}
-              alt={`Thumbnail for ${result.title}`}
-              width={360}
-              height={240}
-            />
-            <h2>{result.title}</h2>
-          </div>
+          <Link href={result.url} key={index}>
+            <div className={'mt-4 p-4'} key={index}>
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_URL}${result.thumbnail}`}
+                alt={`Thumbnail for ${result.title}`}
+                width={360}
+                height={240}
+              />
+              <h2>{result.title}</h2>
+            </div>
+          </Link>
         ))}
     </div>
   )
