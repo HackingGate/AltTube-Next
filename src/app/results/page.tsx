@@ -30,7 +30,7 @@ function ResultsInner() {
     if (!search_query) return
 
     const fetchData = async () => {
-      const fetchUrl = `${process.env.ALTTUBE_GO_SERVER}/piped/search?q=${encodeURIComponent(search_query as string)}`
+      const fetchUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/piped/search?q=${encodeURIComponent(search_query as string)}`
       const response = await fetch(fetchUrl, {
         method: 'GET',
         headers: {
@@ -50,7 +50,7 @@ function ResultsInner() {
         searchResults.items.map((result, index) => (
           <div className={'mt-4 p-4'} key={index}>
             <Image
-              src={`${process.env.ALTTUBE_GO_SERVER}${result.thumbnail}`}
+              src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}${result.thumbnail}`}
               alt={`Thumbnail for ${result.title}`}
               width={360}
               height={240}
