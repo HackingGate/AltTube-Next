@@ -23,6 +23,8 @@ export default function Login() {
     // VStack
     <div className={'flex flex-col items-center'}>
       <LoginForm
+        email={email}
+        password={password}
         onSubmit={(event) => {
           event.preventDefault()
           handleLogin()
