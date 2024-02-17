@@ -45,6 +45,7 @@ function AuthButton() {
   }, [signupRejectedMessage])
 
   useEffect(() => {
+    dispatch(refreshTokenAction())
     const interval = setInterval(() => {
       if (refreshToken) {
         dispatch(refreshTokenAction())
