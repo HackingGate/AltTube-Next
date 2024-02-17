@@ -5,9 +5,15 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { setSearchQuery } from '../redux/slice/searchSlice'
 import { RootState } from '../redux/store/rootReducer'
 import { useState } from 'react'
+import { debounce } from 'lodash'
+import { fetchSearchSuggestions } from '@/app/redux/slice/searchSuggestionsSlice'
+import { store } from '../redux/store/configureStore'
+
+// Get the specific dispatch type from the store
+type AppDispatch = typeof store.dispatch
 
 const NavBar = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
   const searchParams = useSearchParams()
   const urlSearchQuery = searchParams.get('search_query')
@@ -29,6 +35,14 @@ const NavBar = () => {
     router.push(`/results?search_query=${encodedSearchQuery}`)
   }
 
+  const debouncedSearchSuggestions = debounce((query: string) => {
+    const encodedQuery = encodeURIComponent(query).replace(
+      /%20/g,
+      '+',
+    )
+    dispatch(fetchSearchSuggestions(encodedQuery))
+  }, 500)
+
   return (
     <nav className="bg-gray-800 text-white p-4">
       <form
@@ -41,6 +55,7 @@ const NavBar = () => {
           onChange={(e) => {
             setUrlSearchQueryState(null)
             dispatch(setSearchQuery(e.target.value))
+            debouncedSearchSuggestions(e.target.value)
           }}
           placeholder="Search..."
           className="flex-grow p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-purple-600 text-black bg-white"
