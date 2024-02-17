@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
   async (_, { rejectWithValue }) => {

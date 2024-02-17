@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { loginUser } from '@/app/redux/slice/user/loginUser'
 import { logoutUser } from '@/app/redux/slice/user/logoutUser'
+import { signupUser } from '@/app/redux/slice/user/signupUser'
 
 interface UserItem {
   name: string
   email: string
   accessToken: string | null
   refreshToken: string | null
+  signupFulfilledMessage?: string
+  signupRejectedMessage?: string
 }
 
 const initialState: UserItem = {
@@ -39,6 +42,23 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state) => {
         state.accessToken = null
         state.refreshToken = null
+      })
+      .addCase(signupUser.pending, (state) => {
+        state.accessToken = null
+        state.refreshToken = null
+      })
+      .addCase(
+        signupUser.fulfilled,
+        (state, action: PayloadAction<{ message: string }>) => {
+          state.signupFulfilledMessage = action.payload.message
+        },
+      )
+      .addCase(signupUser.rejected, (state, action) => {
+        if (action.payload) {
+          state.signupRejectedMessage = action.payload.message;
+        } else {
+          state.signupRejectedMessage = action.error.message;
+        }
       })
       .addCase(logoutUser.pending, (state) => {
         state.accessToken = null

@@ -15,9 +15,12 @@ function AuthButton() {
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
 
-  const { accessToken, refreshToken } = useSelector(
-    (state: RootState) => state.user,
-  )
+  const {
+    accessToken,
+    refreshToken,
+    signupFulfilledMessage,
+    signupRejectedMessage,
+  } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
     if (accessToken && refreshToken) {
@@ -26,6 +29,19 @@ function AuthButton() {
       localStorage.setItem('refreshToken', refreshToken)
     }
   }, [accessToken, refreshToken, router])
+
+  useEffect(() => {
+    if (signupFulfilledMessage) {
+      alert(signupFulfilledMessage)
+      router.push('/user/login')
+    }
+  }, [router, signupFulfilledMessage])
+
+  useEffect(() => {
+    if (signupRejectedMessage) {
+      alert(signupRejectedMessage)
+    }
+  }, [signupRejectedMessage])
 
   const handleLogout = () => {
     dispatch(logoutUser())
@@ -36,8 +52,8 @@ function AuthButton() {
   } else {
     return (
       <div className={'space-x-4'}>
-        <Link href={'/login'}>Login</Link>
-        <Link href={'/signup'}>Signup</Link>
+        <Link href={'/user/login'}>Login</Link>
+        <Link href={'/user/signup'}>Signup</Link>
       </div>
     )
   }

@@ -1,4 +1,3 @@
-
 // Async thunk for user login
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
