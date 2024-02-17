@@ -6,7 +6,7 @@ import streamResultSlice from '@/app/redux/slice/streamResultSlice'
 const rootReducer = combineReducers({
   search: searchReducer,
   searchResults: searchResultsSlice,
-  stream: streamResultSlice,
+  streamResult: streamResultSlice,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
