@@ -16,17 +16,20 @@ const initialState: UserItem = {
 
 // Async thunk for user login
 export const loginUser = createAsyncThunk<
-  { accessToken: string, refreshToken: string },
+  { accessToken: string; refreshToken: string },
   { email: string; password: string },
   { rejectValue: string }
 >('user/loginUser', async ({ email, password }, { rejectWithValue }) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
     },
-    body: JSON.stringify({ email, password }),
-  })
+  )
   if (!response.ok) {
     return rejectWithValue('Login failed')
   }
@@ -46,7 +49,10 @@ const userSlice = createSlice({
       })
       .addCase(
         loginUser.fulfilled,
-        (state, action: PayloadAction<{ accessToken: string, refreshToken: string }>) => {
+        (
+          state,
+          action: PayloadAction<{ accessToken: string; refreshToken: string }>,
+        ) => {
           state.accessToken = action.payload.accessToken
           state.refreshToken = action.payload.refreshToken
         },
