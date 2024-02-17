@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
-import { setSearchQuery } from '../redux/store/searchSlice'
+import { setSearchQuery } from '../redux/slice/searchSlice'
 import { RootState } from '../redux/store/rootReducer'
 
 const NavBar = () => {
