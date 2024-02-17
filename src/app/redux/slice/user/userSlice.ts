@@ -79,6 +79,10 @@ const userSlice = createSlice({
           state.refreshToken = action.payload.refreshToken
         },
       )
+      .addCase(refreshTokenAction.rejected, (state) => {
+        state.accessToken = null
+        state.refreshToken = null
+      })
   },
 })
 
