@@ -7,10 +7,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { fetchSearchResults } from '../redux/store/searchResultsSlice'
 import { RootState } from '../redux/store/rootReducer'
-import { store } from '../redux/store/configureStore';
+import { store } from '../redux/store/configureStore'
 
 // Get the specific dispatch type from the store
-type AppDispatch = typeof store.dispatch;
+type AppDispatch = typeof store.dispatch
 
 export default function Results() {
   return (
@@ -21,7 +21,7 @@ export default function Results() {
 }
 
 function ResultsInner() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>()
   const searchParams = useSearchParams()
   const search_query = searchParams.get('search_query')
 
@@ -35,7 +35,7 @@ function ResultsInner() {
   // Fetch data when component mounts or search_query changes
   useEffect(() => {
     if (search_query) {
-      dispatch(fetchSearchResults({ query: search_query }));
+      dispatch(fetchSearchResults({ query: search_query }))
     }
   }, [dispatch, search_query])
 
