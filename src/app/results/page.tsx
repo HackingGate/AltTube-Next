@@ -38,7 +38,11 @@ function ResultsInner() {
   // Fetch data when component mounts or search_query changes
   useEffect(() => {
     if (search_query) {
-      dispatch(fetchSearchResults({ query: search_query }))
+      const encodedSearchQuery = encodeURIComponent(search_query).replace(
+        /%20/g,
+        '+',
+      )
+      dispatch(fetchSearchResults({ query: encodedSearchQuery }))
     }
   }, [dispatch, search_query])
 
