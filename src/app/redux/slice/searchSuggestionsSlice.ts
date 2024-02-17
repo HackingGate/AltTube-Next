@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-
 interface SearchSuggestionsState {
   items: string[]
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -40,13 +39,10 @@ const searchSuggestionsSlice = createSlice({
         state.status = 'loading'
         state.error = undefined
       })
-      .addCase(
-        fetchSearchSuggestions.fulfilled,
-        (state, action) => {
-          state.status = 'succeeded'
-          state.items = action.payload
-        },
-      )
+      .addCase(fetchSearchSuggestions.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.items = action.payload
+      })
       .addCase(fetchSearchSuggestions.rejected, (state, action) => {
         if (action.payload) {
           state.error = action.payload
