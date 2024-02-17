@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
+import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -21,6 +22,7 @@ function AuthButton() {
     refreshToken,
     signupFulfilledMessage,
     signupRejectedMessage,
+    deleteFulfilledMessage,
   } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
@@ -66,8 +68,24 @@ function AuthButton() {
     dispatch(logoutUserAction())
   }
 
+  const handleDeleteAccount = () => {
+    dispatch(deleteUserAction())
+  }
+
+  useEffect(() => {
+    if (deleteFulfilledMessage) {
+      alert(deleteFulfilledMessage)
+      router.push('/')
+    }
+  }, [deleteFulfilledMessage, router])
+
   if (accessToken && refreshToken) {
-    return <button onClick={handleLogout}>Logout</button>
+    return (
+      <div className={'space-x-4'}>
+        <button onClick={handleLogout}>Logout</button>
+        <button onClick={handleDeleteAccount}>Delete Account</button>
+      </div>
+    )
   } else {
     return (
       <div className={'space-x-4'}>

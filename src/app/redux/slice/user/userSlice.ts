@@ -3,6 +3,7 @@ import { loginUserAction } from '@/app/redux/slice/user/loginUserAction'
 import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
 import { signupUserAction } from '@/app/redux/slice/user/signupUserAction'
 import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
+import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
 
 interface UserItem {
   name: string
@@ -11,6 +12,7 @@ interface UserItem {
   refreshToken: string | null
   signupFulfilledMessage?: string
   signupRejectedMessage?: string
+  deleteFulfilledMessage?: string
 }
 
 const initialState: UserItem = {
@@ -82,6 +84,12 @@ const userSlice = createSlice({
       .addCase(refreshTokenAction.rejected, (state) => {
         state.accessToken = null
         state.refreshToken = null
+      })
+      // delete account
+      .addCase(deleteUserAction.fulfilled, (state, action: PayloadAction<{ message: string}>) => {
+        state.accessToken = null
+        state.refreshToken = null
+        state.deleteFulfilledMessage = action.payload.message
       })
   },
 })
