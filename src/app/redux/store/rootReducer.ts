@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux'
 import searchReducer from './searchSlice'
+import searchResultsSlice from '@/app/redux/store/searchResultsSlice'
 
 const rootReducer = combineReducers({
-  // other reducers...
   search: searchReducer,
+  searchResults: searchResultsSlice,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
