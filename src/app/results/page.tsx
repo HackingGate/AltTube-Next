@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { fetchSearchResults, SearchResultItem } from '@/app/redux/slice/searchResultsSlice'
+import {
+  fetchSearchResults,
+  SearchResultItem,
+} from '@/app/redux/slice/searchResultsSlice'
 import { RootState } from '@/app/redux/store/rootReducer'
 import { store } from '../redux/store/configureStore'
 
