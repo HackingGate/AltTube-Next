@@ -20,6 +20,7 @@ function AuthButton() {
   const {
     accessToken,
     refreshToken,
+    loginRejectedMessage,
     signupFulfilledMessage,
     signupRejectedMessage,
     deleteFulfilledMessage,
@@ -78,6 +79,12 @@ function AuthButton() {
       router.push('/')
     }
   }, [deleteFulfilledMessage, router])
+
+  useEffect(() => {
+    if (loginRejectedMessage) {
+      alert(loginRejectedMessage)
+    }
+  }, [loginRejectedMessage])
 
   if (accessToken && refreshToken) {
     return (

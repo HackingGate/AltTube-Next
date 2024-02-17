@@ -10,6 +10,7 @@ interface UserItem {
   email: string
   accessToken: string | null
   refreshToken: string | null
+  loginRejectedMessage?: string
   signupFulfilledMessage?: string
   signupRejectedMessage?: string
   deleteFulfilledMessage?: string
@@ -43,9 +44,14 @@ const userSlice = createSlice({
           state.refreshToken = action.payload.refreshToken
         },
       )
-      .addCase(loginUserAction.rejected, (state) => {
+      .addCase(loginUserAction.rejected, (state, action) => {
         state.accessToken = null
         state.refreshToken = null
+        if (action.payload) {
+          state.loginRejectedMessage = action.payload.error
+        } else {
+          state.loginRejectedMessage = action.error.message
+        }
       })
       // signup
       .addCase(signupUserAction.pending, (state) => {
@@ -60,7 +66,7 @@ const userSlice = createSlice({
       )
       .addCase(signupUserAction.rejected, (state, action) => {
         if (action.payload) {
-          state.signupRejectedMessage = action.payload.message
+          state.signupRejectedMessage = action.payload.error
         } else {
           state.signupRejectedMessage = action.error.message
         }

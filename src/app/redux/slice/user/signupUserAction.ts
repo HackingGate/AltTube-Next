@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 export const signupUserAction = createAsyncThunk<
   { message: string },
   { email: string; password: string },
-  { rejectValue: { message: string } }
+  { rejectValue: { error: string } }
 >('user/signupUser', async ({ email, password }, { rejectWithValue }) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
@@ -17,7 +17,7 @@ export const signupUserAction = createAsyncThunk<
   )
   const data = await response.json()
   if (!response.ok) {
-    return rejectWithValue(data.message)
+    return rejectWithValue({ error: data.error })
   }
   return { message: data.message }
 })
