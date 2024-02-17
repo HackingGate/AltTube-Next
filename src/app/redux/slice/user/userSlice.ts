@@ -92,11 +92,14 @@ const userSlice = createSlice({
         state.refreshToken = null
       })
       // delete account
-      .addCase(deleteUserAction.fulfilled, (state, action: PayloadAction<{ message: string}>) => {
-        state.accessToken = null
-        state.refreshToken = null
-        state.deleteFulfilledMessage = action.payload.message
-      })
+      .addCase(
+        deleteUserAction.fulfilled,
+        (state, action: PayloadAction<{ message: string }>) => {
+          state.accessToken = null
+          state.refreshToken = null
+          state.deleteFulfilledMessage = action.payload.message
+        },
+      )
   },
 })
 

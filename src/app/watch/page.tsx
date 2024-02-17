@@ -29,7 +29,9 @@ function WatchInner() {
   const playerRef = useRef(null)
 
   const stream = useSelector((state: RootState) => state.streamResult)
-  const streamStatus = useSelector((state: RootState) => state.streamResult.status)
+  const streamStatus = useSelector(
+    (state: RootState) => state.streamResult.status,
+  )
 
   // Fetch stream data when component mounts
   useEffect(() => {
