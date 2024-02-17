@@ -1,8 +1,7 @@
-// store/searchResultsSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 
 // Define the type for individual search result items.
-interface SearchResultItem {
+export interface SearchResultItem {
   url: string
   thumbnail: string
   title: string

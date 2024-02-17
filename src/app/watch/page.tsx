@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import HlsPlayer from 'react-hls-player'
 import { useRef } from 'react'
 import Link from 'next/link'
-import { RootState } from '../redux/store/rootReducer' // adjust the import path as necessary
-import { fetchStreamResult } from '../redux/store/streamResultSlice' // adjust the import path as necessary
+import { RootState } from '@/app/redux/store/rootReducer' // adjust the import path as necessary
+import { fetchStreamResult } from '@/app/redux/store/streamResultSlice' // adjust the import path as necessary
 import { store } from '../redux/store/configureStore'
 
 // Get the specific dispatch type from the store

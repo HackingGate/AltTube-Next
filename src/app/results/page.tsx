@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { fetchSearchResults } from '../redux/store/searchResultsSlice'
-import { RootState } from '../redux/store/rootReducer'
+import { fetchSearchResults, SearchResultItem } from '@/app/redux/store/searchResultsSlice'
+import { RootState } from '@/app/redux/store/rootReducer'
 import { store } from '../redux/store/configureStore'
 
 // Get the specific dispatch type from the store
@@ -46,7 +46,7 @@ function ResultsInner() {
       {searchStatus === 'succeeded' &&
         searchResults &&
         searchResults.length > 0 &&
-        searchResults.map((result, index) => (
+        searchResults.map((result: SearchResultItem, index: number) => (
           <Link href={result.url} key={index}>
             <div className={'mt-4 p-4'}>
               <Image
