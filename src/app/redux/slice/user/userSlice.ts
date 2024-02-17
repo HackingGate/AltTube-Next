@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import { loginUser } from '@/app/redux/slice/user/loginUser'
+import { logoutUser } from '@/app/redux/slice/user/logoutUser'
 
 interface UserItem {
   name: string
@@ -13,52 +15,6 @@ const initialState: UserItem = {
   accessToken: null,
   refreshToken: null,
 }
-
-// Async thunk for user login
-export const loginUser = createAsyncThunk<
-  { accessToken: string; refreshToken: string },
-  { email: string; password: string },
-  { rejectValue: string }
->('user/loginUser', async ({ email, password }, { rejectWithValue }) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/user/login`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    },
-  )
-  if (!response.ok) {
-    return rejectWithValue('Login failed')
-  }
-  const data = await response.json()
-  return { accessToken: data.access_token, refreshToken: data.refresh_token }
-})
-
-export const logoutUser = createAsyncThunk(
-  'user/logoutUser',
-  async (_, { rejectWithValue }) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/logout`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-      },
-    )
-    if (!response.ok) {
-      return rejectWithValue('Logout failed')
-    }
-    // Clear the access token from local storage
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-
-    return await response.json()
-  },
-)
 
 const userSlice = createSlice({
   name: 'user',

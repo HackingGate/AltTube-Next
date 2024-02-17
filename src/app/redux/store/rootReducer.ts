@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import searchReducer from '../slice/searchSlice'
 import searchResultsSlice from '@/app/redux/slice/searchResultsSlice'
 import streamResultSlice from '@/app/redux/slice/streamResultSlice'
-import userSlice from '@/app/redux/slice/userSlice'
+import userSlice from '@/app/redux/slice/user/userSlice'
 
 const rootReducer = combineReducers({
   search: searchReducer,
