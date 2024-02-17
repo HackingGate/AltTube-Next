@@ -1,14 +1,16 @@
 'use client'
 
+import { Suspense, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { Suspense } from 'react'
 import Link from 'next/link'
+import { fetchSearchResults } from '../redux/store/searchResultsSlice'
+import { RootState } from '../redux/store/rootReducer'
+import { store } from '../redux/store/configureStore'
 
-type SearchResults = {
-  items: Array<any>
-}
+// Get the specific dispatch type from the store
+type AppDispatch = typeof store.dispatch
 
 export default function Results() {
   return (
@@ -19,39 +21,34 @@ export default function Results() {
 }
 
 function ResultsInner() {
+  const dispatch = useDispatch<AppDispatch>()
   const searchParams = useSearchParams()
   const search_query = searchParams.get('search_query')
 
-  const [searchResults, setSearchResults] = useState<SearchResults>({
-    items: [],
-  })
+  const searchResults = useSelector(
+    (state: RootState) => state.searchResults.items,
+  )
+  const searchStatus = useSelector(
+    (state: RootState) => state.searchResults.status,
+  )
 
-  // Fetch data when component mounts
+  // Fetch data when component mounts or search_query changes
   useEffect(() => {
-    if (!search_query) return
-
-    const fetchData = async () => {
-      const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/piped/search?q=${encodeURIComponent(search_query as string)}`
-      const response = await fetch(fetchUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      setSearchResults(await response.json())
+    if (search_query) {
+      dispatch(fetchSearchResults({ query: search_query }))
     }
-
-    fetchData().then(() => console.log('Fetched search results'))
-  }, [search_query])
+  }, [dispatch, search_query])
 
   return (
     <div>
       <h1>Results for {search_query}</h1>
-      {searchResults.items &&
-        searchResults.items.length > 0 &&
-        searchResults.items.map((result, index) => (
+      {searchStatus === 'loading' && <div>Loading...</div>}
+      {searchStatus === 'succeeded' &&
+        searchResults &&
+        searchResults.length > 0 &&
+        searchResults.map((result, index) => (
           <Link href={result.url} key={index}>
-            <div className={'mt-4 p-4'} key={index}>
+            <div className={'mt-4 p-4'}>
               <Image
                 src={`${process.env.NEXT_PUBLIC_API_URL}${result.thumbnail}`}
                 alt={`Thumbnail for ${result.title}`}
@@ -62,6 +59,7 @@ function ResultsInner() {
             </div>
           </Link>
         ))}
+      {searchStatus === 'failed' && <div>Error fetching results.</div>}
     </div>
   )
 }

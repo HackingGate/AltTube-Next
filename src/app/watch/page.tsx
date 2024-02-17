@@ -1,16 +1,18 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Suspense } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import HlsPlayer from 'react-hls-player'
 import { useRef } from 'react'
 import Link from 'next/link'
+import { RootState } from '../redux/store/rootReducer' // adjust the import path as necessary
+import { fetchStreamResult } from '../redux/store/streamResultSlice' // adjust the import path as necessary
+import { store } from '../redux/store/configureStore'
 
-type Stream = {
-  title: string
-  hls: string
-}
+// Get the specific dispatch type from the store
+type AppDispatch = typeof store.dispatch
 
 export default function Watch() {
   return (
@@ -21,49 +23,43 @@ export default function Watch() {
 }
 
 function WatchInner() {
+  const dispatch = useDispatch<AppDispatch>()
   const searchParams = useSearchParams()
   const v = searchParams.get('v')
   const playerRef = useRef(null)
 
-  const [stream, setStream] = useState<Stream>({
-    title: '',
-    hls: '',
-  })
+  const stream = useSelector((state: RootState) => state.stream)
+  const streamStatus = useSelector((state: RootState) => state.stream.status)
 
-  // Fetch data when component mounts
+  // Fetch stream data when component mounts
   useEffect(() => {
-    if (!v) return
-
-    const fetchData = async () => {
-      const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/streams/${encodeURIComponent(v as string)}`
-      const response = await fetch(fetchUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      setStream(await response.json())
+    if (v) {
+      dispatch(fetchStreamResult(v))
     }
-
-    fetchData().then(() => console.log('Fetched streams for video v=' + v))
-  }, [v])
+  }, [dispatch, v])
 
   return (
     <div>
-      <h1>{stream.title}</h1>
-      <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.hls}`}>
-        <p>Play in external player</p>
-      </Link>
-      {stream.hls.length > 0 && (
-        <HlsPlayer
-          src={`${process.env.NEXT_PUBLIC_API_URL}${stream.hls}`}
-          autoPlay={false}
-          controls={true}
-          width="100%"
-          height="auto"
-          playerRef={playerRef}
-        />
+      {streamStatus === 'loading' && <div>Loading...</div>}
+      {streamStatus === 'succeeded' && (
+        <>
+          <h1>{stream.item.title}</h1>
+          <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}>
+            <p>Play in external player</p>
+          </Link>
+          {stream.item.hls && (
+            <HlsPlayer
+              src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
+              autoPlay={false}
+              controls={true}
+              width="100%"
+              height="auto"
+              playerRef={playerRef}
+            />
+          )}
+        </>
       )}
+      {streamStatus === 'failed' && <div>Error: {stream.error}</div>}
     </div>
   )
 }
