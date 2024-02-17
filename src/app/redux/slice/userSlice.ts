@@ -37,6 +37,29 @@ export const loginUser = createAsyncThunk<
   return { accessToken: data.access_token, refreshToken: data.refresh_token }
 })
 
+export const logoutUser = createAsyncThunk(
+  'user/logoutUser',
+  async (_, { rejectWithValue }) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/logout`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      },
+    )
+    if (!response.ok) {
+      return rejectWithValue('Logout failed')
+    }
+    // Clear the access token from local storage
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+
+    return await response.json()
+  },
+)
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -58,6 +81,18 @@ const userSlice = createSlice({
         },
       )
       .addCase(loginUser.rejected, (state) => {
+        state.accessToken = null
+        state.refreshToken = null
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.accessToken = null
+        state.refreshToken = null
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.accessToken = null
+        state.refreshToken = null
+      })
+      .addCase(logoutUser.rejected, (state) => {
         state.accessToken = null
         state.refreshToken = null
       })
