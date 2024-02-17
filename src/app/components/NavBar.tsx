@@ -14,7 +14,11 @@ const NavBar = () => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (searchQuery.trim() === '') return
-    router.push(`/results?search_query=${encodeURIComponent(searchQuery)}`)
+    const encodedSearchQuery = encodeURIComponent(searchQuery).replace(
+      /%20/g,
+      '+',
+    )
+    router.push(`/results?search_query=${encodedSearchQuery}`)
   }
 
   return (
