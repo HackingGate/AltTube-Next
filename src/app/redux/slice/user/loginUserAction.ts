@@ -1,7 +1,6 @@
-// Async thunk for user login
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const loginUser = createAsyncThunk<
+export const loginUserAction = createAsyncThunk<
   { accessToken: string; refreshToken: string },
   { email: string; password: string },
   { rejectValue: string }

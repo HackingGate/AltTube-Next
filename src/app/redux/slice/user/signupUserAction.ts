@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const signupUser = createAsyncThunk<
+export const signupUserAction = createAsyncThunk<
   { message: string },
   { email: string; password: string },
   { rejectValue: { message: string } }

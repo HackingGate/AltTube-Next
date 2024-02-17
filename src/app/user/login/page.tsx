@@ -2,7 +2,7 @@
 
 import { store } from '../../redux/store/configureStore'
 import LoginForm from '@/app/components/LoginForm'
-import { loginUser } from '@/app/redux/slice/user/loginUser'
+import { loginUserAction } from '@/app/redux/slice/user/loginUserAction'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 
@@ -16,7 +16,7 @@ export default function Login() {
   const [password, setPassword] = useState<string>('')
 
   const handleLogin = () => {
-    dispatch(loginUser({ email, password }))
+    dispatch(loginUserAction({ email, password }))
   }
 
   return (

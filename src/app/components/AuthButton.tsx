@@ -3,10 +3,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/app/redux/store/rootReducer'
 import { store } from '../redux/store/configureStore'
-import { logoutUser } from '@/app/redux/slice/user/logoutUser'
+import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -43,8 +44,20 @@ function AuthButton() {
     }
   }, [signupRejectedMessage])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (refreshToken) {
+        dispatch(refreshTokenAction())
+      }
+    }, 180000) // 180000 milliseconds = 3 minutes
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [dispatch, refreshToken])
+
   const handleLogout = () => {
-    dispatch(logoutUser())
+    dispatch(logoutUserAction())
   }
 
   if (accessToken && refreshToken) {

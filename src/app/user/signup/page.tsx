@@ -4,7 +4,7 @@ import { store } from '../../redux/store/configureStore'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import SignupForm from '@/app/components/SignupForm'
-import { signupUser } from '@/app/redux/slice/user/signupUser'
+import { signupUserAction } from '@/app/redux/slice/user/signupUserAction'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -20,7 +20,7 @@ export default function Login() {
       alert('Passwords do not match')
       return
     }
-    dispatch(signupUser({ email, password }))
+    dispatch(signupUserAction({ email, password }))
   }
 
   return (

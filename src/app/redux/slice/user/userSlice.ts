@@ -1,7 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-import { loginUser } from '@/app/redux/slice/user/loginUser'
-import { logoutUser } from '@/app/redux/slice/user/logoutUser'
-import { signupUser } from '@/app/redux/slice/user/signupUser'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { loginUserAction } from '@/app/redux/slice/user/loginUserAction'
+import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
+import { signupUserAction } from '@/app/redux/slice/user/signupUserAction'
+import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
 
 interface UserItem {
   name: string
@@ -25,12 +26,13 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      // login
+      .addCase(loginUserAction.pending, (state) => {
         state.accessToken = null
         state.refreshToken = null
       })
       .addCase(
-        loginUser.fulfilled,
+        loginUserAction.fulfilled,
         (
           state,
           action: PayloadAction<{ accessToken: string; refreshToken: string }>,
@@ -39,39 +41,44 @@ const userSlice = createSlice({
           state.refreshToken = action.payload.refreshToken
         },
       )
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUserAction.rejected, (state) => {
         state.accessToken = null
         state.refreshToken = null
       })
-      .addCase(signupUser.pending, (state) => {
+      // signup
+      .addCase(signupUserAction.pending, (state) => {
         state.accessToken = null
         state.refreshToken = null
       })
       .addCase(
-        signupUser.fulfilled,
+        signupUserAction.fulfilled,
         (state, action: PayloadAction<{ message: string }>) => {
           state.signupFulfilledMessage = action.payload.message
         },
       )
-      .addCase(signupUser.rejected, (state, action) => {
+      .addCase(signupUserAction.rejected, (state, action) => {
         if (action.payload) {
-          state.signupRejectedMessage = action.payload.message;
+          state.signupRejectedMessage = action.payload.message
         } else {
-          state.signupRejectedMessage = action.error.message;
+          state.signupRejectedMessage = action.error.message
         }
       })
-      .addCase(logoutUser.pending, (state) => {
+      // logout
+      .addCase(logoutUserAction.fulfilled, (state) => {
         state.accessToken = null
         state.refreshToken = null
       })
-      .addCase(logoutUser.fulfilled, (state) => {
-        state.accessToken = null
-        state.refreshToken = null
-      })
-      .addCase(logoutUser.rejected, (state) => {
-        state.accessToken = null
-        state.refreshToken = null
-      })
+      // refresh token
+      .addCase(
+        refreshTokenAction.fulfilled,
+        (
+          state,
+          action: PayloadAction<{ accessToken: string; refreshToken: string }>,
+        ) => {
+          state.accessToken = action.payload.accessToken
+          state.refreshToken = action.payload.refreshToken
+        },
+      )
   },
 })
 
