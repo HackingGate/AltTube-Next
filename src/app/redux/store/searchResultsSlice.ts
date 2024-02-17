@@ -31,19 +31,13 @@ interface FetchSearchResultsArg {
 export const fetchSearchResults = createAsyncThunk<SearchResultItem[], FetchSearchResultsArg, { rejectValue: string }>(
   'searchResults/fetchSearchResults',
   async ({ query }, { rejectWithValue }) => {
-    try {
-      const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/piped/search?q=${encodeURIComponent(query)}`;
-      const response = await fetch(fetchUrl);
-      if (!response.ok) {
-        throw new Error('Server error');
-      }
-      // The response should be an object with an 'items' property
-      const data = await response.json();
-      return data.items;
-    } catch (error) {
-      // If an error occurs, we pass the error message to the rejected action
-      return rejectWithValue(error instanceof Error ? error.message : 'Unknown error');
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/piped/search?q=${encodeURIComponent(query)}`;
+    const response = await fetch(fetchUrl);
+    if (!response.ok) {
+      return rejectWithValue('Server error');
     }
+    const data = await response.json();
+    return data.items;
   }
 );
 
