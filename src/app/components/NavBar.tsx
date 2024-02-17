@@ -53,7 +53,7 @@ const NavBar = () => {
     <nav className="bg-gray-800 text-white p-4">
       <form
         onSubmit={handleSearch}
-        className="flex items-center justify-center flex-1"
+        className="flex items-center justify-center flex-1 mx-auto max-w-md w-full"
       >
         <div className="relative flex-grow">
           <input
