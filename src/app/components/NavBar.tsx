@@ -4,10 +4,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { setSearchQuery } from '../redux/slice/searchSlice'
 import { RootState } from '../redux/store/rootReducer'
+import { useState } from 'react'
 
 const NavBar = () => {
   const dispatch = useDispatch()
   const router = useRouter()
+  const searchParams = new URLSearchParams(window.location.search)
+  const urlSearchQuery = searchParams.get('search_query') || undefined
+
+  const [urlSearchQueryState, setUrlSearchQueryState] = useState<
+    string | undefined
+  >(urlSearchQuery)
+
   // Use RootState to type the state parameter
   const searchQuery = useSelector((state: RootState) => state.search.query)
 
@@ -29,8 +37,9 @@ const NavBar = () => {
       >
         <input
           type="text"
-          value={searchQuery}
+          value={urlSearchQueryState || searchQuery}
           onChange={(e) => {
+            setUrlSearchQueryState(undefined)
             dispatch(setSearchQuery(e.target.value))
           }}
           placeholder="Search..."
