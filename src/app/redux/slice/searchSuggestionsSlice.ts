@@ -1,11 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-export interface SearchSuggestionItem {
-  title: string
-}
 
 interface SearchSuggestionsState {
-  items: SearchSuggestionItem[]
+  items: string[]
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | undefined
 }
@@ -17,7 +14,7 @@ const initialState: SearchSuggestionsState = {
 }
 
 export const fetchSearchSuggestions = createAsyncThunk<
-  SearchSuggestionItem[],
+  string[],
   string,
   { rejectValue: string }
 >(
