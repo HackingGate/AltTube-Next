@@ -29,6 +29,11 @@ function AuthButton() {
       localStorage.setItem('accessToken', accessToken)
       localStorage.setItem('refreshToken', refreshToken)
     }
+    if (!accessToken && !refreshToken) {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      router.push('/user/login')
+    }
   }, [accessToken, refreshToken, router])
 
   useEffect(() => {
