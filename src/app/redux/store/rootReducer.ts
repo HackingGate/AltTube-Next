@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-// Import your reducers here, e.g., userReducer, videoReducer, etc.
+import searchReducer from './searchSlice'
 
 const rootReducer = combineReducers({
-  // your reducers will go here
-  // user: userReducer,
-  // video: videoReducer,
+  // other reducers...
+  search: searchReducer,
 })
 
+export type RootState = ReturnType<typeof rootReducer>
 export default rootReducer
