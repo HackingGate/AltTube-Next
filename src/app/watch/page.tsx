@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import HlsPlayer from 'react-hls-player'
 import { useRef } from 'react'
 import Link from 'next/link'
 import { RootState } from '@/app/redux/store/rootReducer' // adjust the import path as necessary
@@ -50,14 +49,6 @@ function WatchInner() {
             <p>Play in external player</p>
           </Link>
           {stream.item.hls && (
-            <HlsPlayer
-              src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
-              autoPlay={false}
-              controls={true}
-              width="100%"
-              height="auto"
-              playerRef={playerRef}
-            />
           )}
         </>
       )}

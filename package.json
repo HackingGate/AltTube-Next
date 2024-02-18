@@ -15,7 +15,6 @@
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-hls-player": "^3.0.7",
     "react-redux": "^9.1.0",
     "redux": "^5.0.1"
   },
