@@ -26,7 +26,7 @@ export const fetchStreamResult = createAsyncThunk<
   string,
   { rejectValue: string }
 >('streamResult/fetchStreamResult', async (videoId, { rejectWithValue }) => {
-  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/streams/${encodeURIComponent(videoId)}`
+  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/piped/streams/${encodeURIComponent(videoId)}`
   const response = await fetch(fetchUrl)
   if (!response.ok) {
     return rejectWithValue('Server error')
