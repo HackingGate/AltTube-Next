@@ -4,12 +4,12 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import HlsPlayer from 'react-hls-player'
 import { useRef } from 'react'
 import Link from 'next/link'
 import { RootState } from '@/app/redux/store/rootReducer' // adjust the import path as necessary
 import { fetchStreamResult } from '@/app/redux/slice/streamResultSlice' // adjust the import path as necessary
 import { store } from '../redux/store/configureStore'
+import Video from 'next-video'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -46,18 +46,15 @@ function WatchInner() {
       {streamStatus === 'succeeded' && (
         <>
           <h1>{stream.item.title}</h1>
-          <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}>
-            <p>Play in external player</p>
-          </Link>
           {stream.item.hls && (
-            <HlsPlayer
-              src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
-              autoPlay={false}
-              controls={true}
-              width="100%"
-              height="auto"
-              playerRef={playerRef}
-            />
+            <div>
+              <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}>
+                <p>m3u8</p>
+              </Link>
+              <Video
+                src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
+              />
+            </div>
           )}
         </>
       )}
