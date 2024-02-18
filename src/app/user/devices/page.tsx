@@ -29,14 +29,16 @@ export default function Devices() {
   return (
     <div>
       <h1>Devices</h1>
-      {devices.items &&
-        devices.items.map((device) => (
-          <div key={device.id}>
-            <p>{device.user_agent}</p>
-            <p>{device.ip_address}</p>
-            <p>{device.last_active}</p>
-          </div>
-        ))}
+      {devices.deviceList.devices.map((device) => (
+        <div key={device.id}>
+          {devices.deviceList.current_device_id === device.id ? (
+            <p>Current Device</p>
+          ) : null}
+          <p>{device.user_agent}</p>
+          <p>{device.ip_address}</p>
+          <p>{device.last_active}</p>
+        </div>
+      ))}
     </div>
   )
 }

@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-export interface deviceItem {
+export interface deviceList {
+  current_device_id: number
+  devices: device[]
+}
+
+interface device {
   id: number
   last_active: string
   user_agent: string
@@ -8,19 +13,22 @@ export interface deviceItem {
 }
 
 export interface devicesState {
-  items: deviceItem[]
+  deviceList: deviceList
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | undefined
 }
 
 const initialState: devicesState = {
-  items: [],
+  deviceList: {
+    current_device_id: 0,
+    devices: [],
+  },
   status: 'idle',
   error: undefined,
 }
 
 export const fetchDevices = createAsyncThunk<
-  deviceItem[],
+  deviceList,
   void,
   { rejectValue: string }
 >('devices/fetchDevices', async (_, { rejectWithValue }) => {
@@ -51,7 +59,7 @@ const devicesSlice = createSlice({
       })
       .addCase(fetchDevices.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.items = action.payload
+        state.deviceList = action.payload
       })
       .addCase(fetchDevices.rejected, (state, action) => {
         if (action.payload) {
