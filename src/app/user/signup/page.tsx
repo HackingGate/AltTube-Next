@@ -4,7 +4,7 @@ import { store } from '../../redux/store/configureStore'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import SignupForm from '@/app/components/SignupForm'
-import { signupUserAction } from '@/app/redux/slice/user/signupUserAction'
+import { signupUserAction } from '@/app/redux/slice/user/userSlice/signupUserAction'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch

@@ -3,12 +3,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@/app/redux/store/rootReducer'
 import { store } from '../redux/store/configureStore'
-import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
+import { logoutUserAction } from '@/app/redux/slice/user/userSlice/logoutUserAction'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
-import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
+import { refreshTokenAction } from '@/app/redux/slice/user/userSlice/refreshTokenAction'
+import { deleteUserAction } from '@/app/redux/slice/user/userSlice/deleteUserAction'
 import { setTokensAction } from '@/app/redux/slice/user/setTokensAction'
 
 // Get the specific dispatch type from the store
