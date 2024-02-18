@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { RootState } from '@/app/redux/store/rootReducer' // adjust the import path as necessary
 import { fetchStreamResult } from '@/app/redux/slice/streamResultSlice' // adjust the import path as necessary
 import { store } from '../redux/store/configureStore'
+import ReactPlayer from 'react-player'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -49,6 +50,9 @@ function WatchInner() {
             <p>Play in external player</p>
           </Link>
           {stream.item.hls && (
+            <ReactPlayer
+              src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
+            />
           )}
         </>
       )}
