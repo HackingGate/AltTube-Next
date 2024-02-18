@@ -48,7 +48,9 @@ function WatchInner() {
           <h1>{stream.item.title}</h1>
           {stream.item.hls && (
             <div>
-              <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
+              >
                 <p>m3u8</p>
               </Link>
               <Video
