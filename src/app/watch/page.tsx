@@ -46,13 +46,15 @@ function WatchInner() {
       {streamStatus === 'succeeded' && (
         <>
           <h1>{stream.item.title}</h1>
-          <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}>
-            <p>Play in external player</p>
-          </Link>
           {stream.item.hls && (
-            <Video
-              src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
-            />
+            <div>
+              <Link href={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}>
+                <p>m3u8</p>
+              </Link>
+              <Video
+                src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
+              />
+            </div>
           )}
         </>
       )}
