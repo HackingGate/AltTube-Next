@@ -5,7 +5,7 @@ import { RootState } from '@/app/redux/store/rootReducer'
 import { store } from '../redux/store/configureStore'
 import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
 import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
@@ -27,20 +27,25 @@ function AuthButton() {
     deleteFulfilledMessage,
   } = useSelector((state: RootState) => state.user)
 
-  useEffect(() => {
-    const storedAccessToken = localStorage.getItem('accessToken')
-    const storedRefreshToken = localStorage.getItem('refreshToken')
+  const [tokensInitialized, setTokensInitialized] = useState<boolean>(false)
 
-    if (storedAccessToken && storedRefreshToken) {
-      // Dispatch an action to set the tokens in your state or context
-      dispatch(
-        setTokensAction({
-          accessToken: storedAccessToken,
-          refreshToken: storedRefreshToken,
-        }),
-      )
+  useEffect(() => {
+    if (!tokensInitialized) {
+      const storedAccessToken = localStorage.getItem('accessToken')
+      const storedRefreshToken = localStorage.getItem('refreshToken')
+
+      if (storedAccessToken && storedRefreshToken) {
+        // Dispatch an action to set the tokens in your state or context
+        dispatch(
+          setTokensAction({
+            accessToken: storedAccessToken,
+            refreshToken: storedRefreshToken,
+          }),
+        )
+        setTokensInitialized(true)
+      }
     }
-  }, [dispatch])
+  }, [dispatch, tokensInitialized])
 
   useEffect(() => {
     if (accessToken && refreshToken) {
