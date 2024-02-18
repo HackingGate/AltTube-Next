@@ -68,15 +68,17 @@ function AuthButton() {
   }, [signupRejectedMessage])
 
   useEffect(() => {
-    dispatch(refreshTokenAction())
-    const interval = setInterval(() => {
-      if (refreshToken) {
-        dispatch(refreshTokenAction())
-      }
-    }, 180000) // 180000 milliseconds = 3 minutes
+    if (refreshToken) {
+      dispatch(refreshTokenAction())
+      const interval = setInterval(() => {
+        if (refreshToken) {
+          dispatch(refreshTokenAction())
+        }
+      }, 180000) // 180000 milliseconds = 3 minutes
 
-    return () => {
-      clearInterval(interval)
+      return () => {
+        clearInterval(interval)
+      }
     }
   }, [dispatch, refreshToken])
 
