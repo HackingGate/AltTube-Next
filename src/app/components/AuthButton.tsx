@@ -113,6 +113,7 @@ function AuthButton() {
       <div className={'space-x-4'}>
         <button onClick={handleLogout}>Logout</button>
         <button onClick={handleDeleteAccount}>Delete Account</button>
+        <button onClick={() => router.push('/user/devices')}>Devices</button>
       </div>
     )
   } else {
