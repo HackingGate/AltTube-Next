@@ -32,9 +32,9 @@ export default function Devices() {
       {devices.items &&
         devices.items.map((device) => (
           <div key={device.id}>
-            <p>{device.userAgent}</p>
-            <p>{device.ipAddress}</p>
-            <p>{device.lastActive}</p>
+            <p>{device.user_agent}</p>
+            <p>{device.ip_address}</p>
+            <p>{device.last_active}</p>
           </div>
         ))}
     </div>

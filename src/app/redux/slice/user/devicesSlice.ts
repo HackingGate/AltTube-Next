@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export interface deviceItem {
   id: number
-  lastActive: string
-  userAgent: string
-  ipAddress: string
+  last_active: string
+  user_agent: string
+  ip_address: string
 }
 
 export interface devicesState {
