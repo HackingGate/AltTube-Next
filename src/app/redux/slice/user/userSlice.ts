@@ -4,6 +4,7 @@ import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
 import { signupUserAction } from '@/app/redux/slice/user/signupUserAction'
 import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
 import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
+import { setTokensAction } from '@/app/redux/slice/user/setTokensAction'
 
 interface UserItem {
   name: string
@@ -100,6 +101,10 @@ const userSlice = createSlice({
           state.deleteFulfilledMessage = action.payload.message
         },
       )
+      .addCase(setTokensAction.fulfilled, (state, action) => {
+        state.accessToken = action.payload.accessToken
+        state.refreshToken = action.payload.refreshToken
+      })
   },
 })
 

@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
 import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
+import { setTokensAction } from '@/app/redux/slice/user/setTokensAction'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -25,6 +26,21 @@ function AuthButton() {
     signupRejectedMessage,
     deleteFulfilledMessage,
   } = useSelector((state: RootState) => state.user)
+
+  useEffect(() => {
+    const storedAccessToken = localStorage.getItem('accessToken')
+    const storedRefreshToken = localStorage.getItem('refreshToken')
+
+    if (storedAccessToken && storedRefreshToken) {
+      // Dispatch an action to set the tokens in your state or context
+      dispatch(
+        setTokensAction({
+          accessToken: storedAccessToken,
+          refreshToken: storedRefreshToken,
+        }),
+      )
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (accessToken && refreshToken) {
