@@ -1,7 +1,5 @@
 'use client'
 
-import { Player } from 'video-react'
-import HLSSource from '../components/HLSSource'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Suspense } from 'react'
@@ -51,12 +49,6 @@ function WatchInner() {
             <p>Play in external player</p>
           </Link>
           {stream.item.hls && (
-            <Player>
-              <HLSSource
-                isVideoChild
-                src={`${process.env.NEXT_PUBLIC_API_URL}${stream.item.hls}`}
-              />
-            </Player>
           )}
         </>
       )}
