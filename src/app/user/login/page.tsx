@@ -2,7 +2,7 @@
 
 import { store } from '../../redux/store/configureStore'
 import LoginForm from '@/app/components/LoginForm'
-import { loginUserAction } from '@/app/redux/slice/user/loginUserAction'
+import { loginUserAction } from '@/app/redux/slice/user/userSlice/loginUserAction'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 

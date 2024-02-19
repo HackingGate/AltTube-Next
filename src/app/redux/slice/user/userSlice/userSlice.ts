@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { loginUserAction } from '@/app/redux/slice/user/loginUserAction'
-import { logoutUserAction } from '@/app/redux/slice/user/logoutUserAction'
-import { signupUserAction } from '@/app/redux/slice/user/signupUserAction'
-import { refreshTokenAction } from '@/app/redux/slice/user/refreshTokenAction'
-import { deleteUserAction } from '@/app/redux/slice/user/deleteUserAction'
+import { loginUserAction } from '@/app/redux/slice/user/userSlice/loginUserAction'
+import { logoutUserAction } from '@/app/redux/slice/user/userSlice/logoutUserAction'
+import { signupUserAction } from '@/app/redux/slice/user/userSlice/signupUserAction'
+import { refreshTokenAction } from '@/app/redux/slice/user/userSlice/refreshTokenAction'
+import { deleteUserAction } from '@/app/redux/slice/user/userSlice/deleteUserAction'
 import { setTokensAction } from '@/app/redux/slice/user/setTokensAction'
 
 interface UserItem {
