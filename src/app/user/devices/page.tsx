@@ -2,7 +2,10 @@
 
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchDevices } from '../../redux/slice/user/devicesSlice'
+import {
+  fetchDevices,
+  deleteDevices,
+} from '../../redux/slice/user/devicesSlice'
 import { store } from '@/app/redux/store/configureStore'
 import { RootState } from '@/app/redux/store/rootReducer'
 
@@ -37,8 +40,23 @@ export default function Devices() {
           <p>{device.user_agent}</p>
           <p>{device.ip_address}</p>
           <p>{device.last_active}</p>
+          <button onClick={() => dispatch(deleteDevices([device.id]))}>
+            Logout
+          </button>
         </div>
       ))}
+      <button
+        onClick={() => {
+          const deviceIdsToDelete = devices.deviceList.devices
+            .filter(
+              (device) => device.id !== devices.deviceList.current_device_id,
+            )
+            .map((device) => device.id)
+          dispatch(deleteDevices(deviceIdsToDelete))
+        }}
+      >
+        Logout All Except Current
+      </button>
     </div>
   )
 }
