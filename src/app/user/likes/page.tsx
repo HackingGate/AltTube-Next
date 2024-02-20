@@ -31,7 +31,10 @@ export default function Likes() {
       {likeVideoStatus === 'succeeded' && (
         <div>
           <h1>Liked Videos</h1>
-          {likeVideo.items && likeVideo.items.map((video) => (
+          {
+            likeVideo.items === null && <div>No liked videos</div>
+          }
+          {likeVideo.items && likeVideo.items.length > 0 && likeVideo.items.map((video) => (
             <Link href={'/watch?v='+video.id} key={video.id}>
               <div className={'mt-4 p-4'}>
                 <Image
