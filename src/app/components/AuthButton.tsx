@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { refreshTokenAction } from '@/app/redux/slice/user/userSlice/refreshTokenAction'
 import { deleteUserAction } from '@/app/redux/slice/user/userSlice/deleteUserAction'
-import { setTokensAction } from '@/app/redux/slice/user/setTokensAction'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -27,38 +26,6 @@ function AuthButton() {
     deleteFulfilledMessage,
   } = useSelector((state: RootState) => state.user)
 
-  const [tokensInitialized, setTokensInitialized] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (!tokensInitialized) {
-      const storedAccessToken = localStorage.getItem('accessToken')
-      const storedRefreshToken = localStorage.getItem('refreshToken')
-
-      if (storedAccessToken && storedRefreshToken) {
-        // Dispatch an action to set the tokens in your state or context
-        dispatch(
-          setTokensAction({
-            accessToken: storedAccessToken,
-            refreshToken: storedRefreshToken,
-          }),
-        )
-        setTokensInitialized(true)
-      }
-    }
-  }, [dispatch, tokensInitialized])
-
-  useEffect(() => {
-    if (accessToken && refreshToken) {
-      router.push('/')
-      localStorage.setItem('accessToken', accessToken)
-      localStorage.setItem('refreshToken', refreshToken)
-    }
-    if (!accessToken && !refreshToken) {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-    }
-  }, [accessToken, refreshToken, router])
-
   useEffect(() => {
     if (signupFulfilledMessage) {
       alert(signupFulfilledMessage)
@@ -71,21 +38,6 @@ function AuthButton() {
       alert(signupRejectedMessage)
     }
   }, [signupRejectedMessage])
-
-  useEffect(() => {
-    if (refreshToken) {
-      dispatch(refreshTokenAction())
-      const interval = setInterval(() => {
-        if (refreshToken) {
-          dispatch(refreshTokenAction())
-        }
-      }, 180000) // 180000 milliseconds = 3 minutes
-
-      return () => {
-        clearInterval(interval)
-      }
-    }
-  }, [dispatch, refreshToken])
 
   const handleLogout = () => {
     dispatch(logoutUserAction())

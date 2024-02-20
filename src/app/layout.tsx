@@ -5,6 +5,7 @@ import NavBar from '@/app/components/NavBar'
 import { ContextProvider } from '@/app/components/ContextProvider'
 import AuthButton from '@/app/components/AuthButton'
 import { Suspense } from 'react'
+import UserTokenProvider from '@/app/components/UserTokenProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,13 +23,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ContextProvider>
-          <div>
-            <Suspense fallback={<div>Loading...</div>}>
-              <NavBar />
-            </Suspense>
+          <Suspense fallback={<div>Loading...</div>}>
+            <NavBar />
+          </Suspense>
+          <UserTokenProvider>
             <AuthButton />
             {children}
-          </div>
+          </UserTokenProvider>
         </ContextProvider>
       </body>
     </html>
