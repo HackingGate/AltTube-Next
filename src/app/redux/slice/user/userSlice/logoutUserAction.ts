@@ -6,7 +6,7 @@ export const logoutUserAction = createAsyncThunk(
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/user/logout`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
         },
