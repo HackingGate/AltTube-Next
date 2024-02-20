@@ -46,7 +46,6 @@ export default function UserTokenProvider({
 
   useEffect(() => {
     if (accessToken && refreshToken) {
-      router.push('/')
       localStorage.setItem('accessToken', accessToken)
       localStorage.setItem('refreshToken', refreshToken)
     }

@@ -13,7 +13,7 @@ import { deleteUserAction } from '@/app/redux/slice/user/userSlice/deleteUserAct
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
 
-function AuthButton() {
+function TopBar() {
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
 
@@ -63,6 +63,7 @@ function AuthButton() {
   if (accessToken && refreshToken) {
     return (
       <div className={'space-x-4'}>
+        <Link href={'/'}>Home</Link>
         <button onClick={handleLogout}>Logout</button>
         <button onClick={handleDeleteAccount}>Delete Account</button>
         <button onClick={() => router.push('/user/devices')}>Devices</button>
@@ -72,6 +73,7 @@ function AuthButton() {
   } else {
     return (
       <div className={'space-x-4'}>
+        <Link href={'/'}>Home</Link>
         <Link href={'/user/login'}>Login</Link>
         <Link href={'/user/signup'}>Signup</Link>
       </div>
@@ -79,4 +81,4 @@ function AuthButton() {
   }
 }
 
-export default AuthButton
+export default TopBar

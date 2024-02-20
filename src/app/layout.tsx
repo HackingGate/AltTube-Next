@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import NavBar from '@/app/components/NavBar'
 import { ContextProvider } from '@/app/components/ContextProvider'
-import AuthButton from '@/app/components/AuthButton'
+import TopBar from '@/app/components/TopBar'
 import { Suspense } from 'react'
 import UserTokenProvider from '@/app/components/UserTokenProvider'
 
@@ -27,7 +27,7 @@ export default function RootLayout({
             <NavBar />
           </Suspense>
           <UserTokenProvider>
-            <AuthButton />
+            <TopBar />
             {children}
           </UserTokenProvider>
         </ContextProvider>
