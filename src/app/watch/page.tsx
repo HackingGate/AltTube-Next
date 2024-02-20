@@ -10,6 +10,12 @@ import { RootState } from '@/app/redux/store/rootReducer' // adjust the import p
 import { fetchStreamResult } from '@/app/redux/slice/streamResultSlice' // adjust the import path as necessary
 import { store } from '../redux/store/configureStore'
 import Video from 'next-video'
+import {
+  addLikeVideo,
+  fetchLikeVideo,
+  removeLikeVideo,
+} from '@/app/redux/slice/like-video/likeVideoSlice'
+import { useRouter } from 'next/navigation'
 
 // Get the specific dispatch type from the store
 type AppDispatch = typeof store.dispatch
@@ -23,20 +29,28 @@ export default function Watch() {
 }
 
 function WatchInner() {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const searchParams = useSearchParams()
   const v = searchParams.get('v')
-  const playerRef = useRef(null)
 
   const stream = useSelector((state: RootState) => state.streamResult)
   const streamStatus = useSelector(
     (state: RootState) => state.streamResult.status,
   )
 
+  const likeVideo = useSelector((state: RootState) => state.likeVideo)
+  const likeVideoStatus = useSelector(
+    (state: RootState) => state.likeVideo.status,
+  )
+
+  const user = useSelector((state: RootState) => state.user)
+
   // Fetch stream data when component mounts
   useEffect(() => {
     if (v) {
       dispatch(fetchStreamResult(v))
+      dispatch(fetchLikeVideo(v))
     }
   }, [dispatch, v])
 
@@ -46,6 +60,27 @@ function WatchInner() {
       {streamStatus === 'succeeded' && (
         <>
           <h1>{stream.item.title}</h1>
+          {v && likeVideo && (
+            <button
+              onClick={() => {
+                if (user.accessToken) {
+                  if (likeVideo.liked) {
+                    dispatch(removeLikeVideo(v))
+                  } else {
+                    dispatch(addLikeVideo(v))
+                  }
+                } else {
+                  router.push('/user/login')
+                }
+              }}
+            >
+              {likeVideoStatus === 'loading'
+                ? 'Loading...'
+                : likeVideo.liked
+                  ? 'Unlike'
+                  : 'Like'}
+            </button>
+          )}
           {stream.item.hls && (
             <div>
               <Link

@@ -114,6 +114,7 @@ function AuthButton() {
         <button onClick={handleLogout}>Logout</button>
         <button onClick={handleDeleteAccount}>Delete Account</button>
         <button onClick={() => router.push('/user/devices')}>Devices</button>
+        <button onClick={() => router.push('/user/likes')}>Likes</button>
       </div>
     )
   } else {
