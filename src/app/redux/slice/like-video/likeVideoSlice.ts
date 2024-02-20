@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export interface LikeVideoItem {
   id: string
   title: string
-  thumbnailUrl: string
+  thumbnail_url: string
 }
 
 interface LikeVideoResultState {
@@ -36,8 +36,7 @@ export const fetchLikedVideos = createAsyncThunk<
   if (!response.ok) {
     return rejectWithValue('Server error')
   }
-  const data = await response.json()
-  return data.items
+  return await response.json()
 })
 
 export const fetchLikeVideo = createAsyncThunk<
