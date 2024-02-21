@@ -13,15 +13,17 @@ type AppDispatch = typeof store.dispatch
 
 export default function Likes() {
   const dispatch = useDispatch<AppDispatch>()
-
+  const { accessToken } = useSelector((state: RootState) => state.user)
   const likeVideo = useSelector((state: RootState) => state.likeVideo)
   const likeVideoStatus = useSelector(
     (state: RootState) => state.likeVideo.status,
   )
 
   useEffect(() => {
-    dispatch(fetchLikedVideos())
-  }, [dispatch])
+    if (accessToken) {
+      dispatch(fetchLikedVideos({ accessToken: accessToken }))
+    }
+  }, [dispatch, accessToken])
 
   return (
     <div>

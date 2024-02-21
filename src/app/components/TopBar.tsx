@@ -40,11 +40,15 @@ function TopBar() {
   }, [signupRejectedMessage])
 
   const handleLogout = () => {
-    dispatch(logoutUserAction())
+    if (accessToken) {
+      dispatch(logoutUserAction({ accessToken: accessToken }))
+    }
   }
 
   const handleDeleteAccount = () => {
-    dispatch(deleteUserAction())
+    if (accessToken) {
+      dispatch(deleteUserAction({ accessToken: accessToken }))
+    }
   }
 
   useEffect(() => {

@@ -2,16 +2,16 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 
 export const refreshTokenAction = createAsyncThunk<
   { accessToken: string; refreshToken: string },
-  void,
+  { refreshToken: string },
   { rejectValue: { message: string } }
->('user/refreshToken', async (_, { rejectWithValue }) => {
+>('user/refreshToken', async ({ refreshToken }, { rejectWithValue }) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/user/refresh_token`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
+        Authorization: `Bearer ${refreshToken}`,
       },
     },
   )

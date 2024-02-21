@@ -39,15 +39,15 @@ const initialState: devicesState = {
 
 export const fetchDevices = createAsyncThunk<
   deviceList,
-  void,
+  { accessToken: string },
   { rejectValue: string }
->('devices/fetchDevices', async (_, { rejectWithValue }) => {
+>('devices/fetchDevices', async ({ accessToken }, { rejectWithValue }) => {
   const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/user/devices`
   const response = await fetch(fetchUrl, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   })
   if (!response.ok) {
@@ -58,23 +58,26 @@ export const fetchDevices = createAsyncThunk<
 
 export const deleteDevices = createAsyncThunk<
   deleteDevicesResponse,
-  number[],
+  { ids: number[]; accessToken: string },
   { rejectValue: string }
->('devices/deleteDevices', async (ids, { rejectWithValue }) => {
-  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/user/devices`
-  const response = await fetch(fetchUrl, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-    body: JSON.stringify(ids),
-  })
-  if (!response.ok) {
-    return rejectWithValue('Server error')
-  }
-  return await response.json()
-})
+>(
+  'devices/deleteDevices',
+  async ({ ids, accessToken }, { rejectWithValue }) => {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/user/devices`
+    const response = await fetch(fetchUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(ids),
+    })
+    if (!response.ok) {
+      return rejectWithValue('Server error')
+    }
+    return await response.json()
+  },
+)
 
 // Create slice for devices
 const devicesSlice = createSlice({

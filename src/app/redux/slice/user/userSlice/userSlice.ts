@@ -4,7 +4,6 @@ import { logoutUserAction } from '@/app/redux/slice/user/userSlice/logoutUserAct
 import { signupUserAction } from '@/app/redux/slice/user/userSlice/signupUserAction'
 import { refreshTokenAction } from '@/app/redux/slice/user/userSlice/refreshTokenAction'
 import { deleteUserAction } from '@/app/redux/slice/user/userSlice/deleteUserAction'
-import { setTokensAction } from '@/app/redux/slice/user/setTokensAction'
 
 interface UserItem {
   name: string
@@ -15,6 +14,8 @@ interface UserItem {
   signupFulfilledMessage?: string
   signupRejectedMessage?: string
   deleteFulfilledMessage?: string
+  needToPushToHome?: boolean
+  needToPushToLogin?: boolean
 }
 
 const initialState: UserItem = {
@@ -27,7 +28,21 @@ const initialState: UserItem = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setTokensAction: (
+      state,
+      action: PayloadAction<{ accessToken: string; refreshToken: string }>,
+    ) => {
+      state.accessToken = action.payload.accessToken
+      state.refreshToken = action.payload.refreshToken
+    },
+    resetNeedToPushToHome: (state) => {
+      state.needToPushToHome = false
+    },
+    resetNeedToPushToLogin: (state) => {
+      state.needToPushToLogin = false
+    },
+  },
   extraReducers: (builder) => {
     builder
       // login
@@ -43,6 +58,7 @@ const userSlice = createSlice({
         ) => {
           state.accessToken = action.payload.accessToken
           state.refreshToken = action.payload.refreshToken
+          state.needToPushToHome = true
         },
       )
       .addCase(loginUserAction.rejected, (state, action) => {
@@ -63,6 +79,7 @@ const userSlice = createSlice({
         signupUserAction.fulfilled,
         (state, action: PayloadAction<{ message: string }>) => {
           state.signupFulfilledMessage = action.payload.message
+          state.needToPushToLogin = true
         },
       )
       .addCase(signupUserAction.rejected, (state, action) => {
@@ -101,11 +118,13 @@ const userSlice = createSlice({
           state.deleteFulfilledMessage = action.payload.message
         },
       )
-      .addCase(setTokensAction.fulfilled, (state, action) => {
-        state.accessToken = action.payload.accessToken
-        state.refreshToken = action.payload.refreshToken
-      })
   },
 })
+
+export const {
+  setTokensAction,
+  resetNeedToPushToHome,
+  resetNeedToPushToLogin,
+} = userSlice.actions
 
 export default userSlice.reducer

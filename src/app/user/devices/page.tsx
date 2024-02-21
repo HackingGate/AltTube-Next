@@ -14,12 +14,14 @@ type AppDispatch = typeof store.dispatch
 
 export default function Devices() {
   const dispatch = useDispatch<AppDispatch>()
+  const { accessToken } = useSelector((state: RootState) => state.user)
+  const devices = useSelector((state: RootState) => state.devices)
 
   useEffect(() => {
-    dispatch(fetchDevices())
-  }, [dispatch])
-
-  const devices = useSelector((state: RootState) => state.devices)
+    if (accessToken) {
+      dispatch(fetchDevices({ accessToken: accessToken }))
+    }
+  }, [accessToken, dispatch])
 
   if (devices.status === 'loading') {
     return <div>Loading...</div>
@@ -27,6 +29,14 @@ export default function Devices() {
 
   if (devices.status === 'failed') {
     return <div>Error: {devices.error}</div>
+  }
+
+  if (!devices.deviceList) {
+    return <div>No devices</div>
+  }
+
+  if (!accessToken) {
+    return <div>Not logged in</div>
   }
 
   return (
@@ -40,7 +50,13 @@ export default function Devices() {
           <p>{device.user_agent}</p>
           <p>{device.ip_address}</p>
           <p>{device.last_active}</p>
-          <button onClick={() => dispatch(deleteDevices([device.id]))}>
+          <button
+            onClick={() =>
+              dispatch(
+                deleteDevices({ ids: [device.id], accessToken: accessToken }),
+              )
+            }
+          >
             Logout
           </button>
         </div>
@@ -52,7 +68,9 @@ export default function Devices() {
               (device) => device.id !== devices.deviceList.current_device_id,
             )
             .map((device) => device.id)
-          dispatch(deleteDevices(deviceIdsToDelete))
+          dispatch(
+            deleteDevices({ ids: deviceIdsToDelete, accessToken: accessToken }),
+          )
         }}
       >
         Logout All Except Current

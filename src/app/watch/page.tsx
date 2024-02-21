@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useRef } from 'react'
 import Link from 'next/link'
 import { RootState } from '@/app/redux/store/rootReducer' // adjust the import path as necessary
 import { fetchStreamResult } from '@/app/redux/slice/streamResultSlice' // adjust the import path as necessary
@@ -34,6 +33,7 @@ function WatchInner() {
   const searchParams = useSearchParams()
   const v = searchParams.get('v')
 
+  const { accessToken } = useSelector((state: RootState) => state.user)
   const stream = useSelector((state: RootState) => state.streamResult)
   const streamStatus = useSelector(
     (state: RootState) => state.streamResult.status,
@@ -44,15 +44,13 @@ function WatchInner() {
     (state: RootState) => state.likeVideo.status,
   )
 
-  const user = useSelector((state: RootState) => state.user)
-
   // Fetch stream data when component mounts
   useEffect(() => {
-    if (v) {
+    if (v && accessToken) {
       dispatch(fetchStreamResult(v))
-      dispatch(fetchLikeVideo(v))
+      dispatch(fetchLikeVideo({ videoID: v, accessToken: accessToken }))
     }
-  }, [dispatch, v])
+  }, [dispatch, v, accessToken])
 
   return (
     <div>
@@ -63,13 +61,18 @@ function WatchInner() {
           {v && likeVideo && (
             <button
               onClick={() => {
-                if (user.accessToken) {
+                if (accessToken) {
                   if (likeVideo.liked) {
-                    dispatch(removeLikeVideo(v))
+                    dispatch(
+                      removeLikeVideo({ videoID: v, accessToken: accessToken }),
+                    )
                   } else {
-                    dispatch(addLikeVideo(v))
+                    dispatch(
+                      addLikeVideo({ videoID: v, accessToken: accessToken }),
+                    )
                   }
                 } else {
+                  alert('You must be logged in to like a video')
                   router.push('/user/login')
                 }
               }}

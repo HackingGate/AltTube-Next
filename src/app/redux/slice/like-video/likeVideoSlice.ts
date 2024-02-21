@@ -22,80 +22,92 @@ export const initialState: LikeVideoResultState = {
 
 export const fetchLikedVideos = createAsyncThunk<
   LikeVideoItem[],
-  void,
+  { accessToken: string },
   { rejectValue: string }
->('likeVideos/fetchLikedVideos', async (_, { rejectWithValue }) => {
-  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like`
-  const response = await fetch(fetchUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  })
-  if (!response.ok) {
-    return rejectWithValue('Server error')
-  }
-  return await response.json()
-})
+>(
+  'likeVideos/fetchLikedVideos',
+  async ({ accessToken }, { rejectWithValue }) => {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like`
+    const response = await fetch(fetchUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    if (!response.ok) {
+      return rejectWithValue('Server error')
+    }
+    return await response.json()
+  },
+)
 
 export const fetchLikeVideo = createAsyncThunk<
   boolean,
-  string,
+  { videoID: string; accessToken: string },
   { rejectValue: string }
->('likeVideos/fetchLikeVideo', async (videoID, { rejectWithValue }) => {
-  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like/${videoID}`
-  const response = await fetch(fetchUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  })
-  if (!response.ok) {
-    return rejectWithValue('Server error')
-  }
-  return await response.json()
-})
+>(
+  'likeVideos/fetchLikeVideo',
+  async ({ videoID, accessToken }, { rejectWithValue }) => {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like/${videoID}`
+    const response = await fetch(fetchUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    if (!response.ok) {
+      return rejectWithValue('Server error')
+    }
+    return await response.json()
+  },
+)
 
 export const addLikeVideo = createAsyncThunk<
   string,
-  string,
+  { videoID: string; accessToken: string },
   { rejectValue: string }
->('likeVideos/addLikeVideo', async (videoID, { rejectWithValue }) => {
-  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like/${videoID}`
-  const response = await fetch(fetchUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  })
-  if (!response.ok) {
-    return rejectWithValue('Server error')
-  }
-  const data = await response.json()
-  return await data.is_liked
-})
+>(
+  'likeVideos/addLikeVideo',
+  async ({ videoID, accessToken }, { rejectWithValue }) => {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like/${videoID}`
+    const response = await fetch(fetchUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    if (!response.ok) {
+      return rejectWithValue('Server error')
+    }
+    const data = await response.json()
+    return await data.is_liked
+  },
+)
 
 export const removeLikeVideo = createAsyncThunk<
   string,
-  string,
+  { videoID: string; accessToken: string },
   { rejectValue: string }
->('likeVideos/removeLikeVideo', async (videoID, { rejectWithValue }) => {
-  const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like/${videoID}`
-  const response = await fetch(fetchUrl, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  })
-  if (!response.ok) {
-    return rejectWithValue('Server error')
-  }
-  return videoID
-})
+>(
+  'likeVideos/removeLikeVideo',
+  async ({ videoID, accessToken }, { rejectWithValue }) => {
+    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/like/${videoID}`
+    const response = await fetch(fetchUrl, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    if (!response.ok) {
+      return rejectWithValue('Server error')
+    }
+    return videoID
+  },
+)
 
 const likeVideosSlice = createSlice({
   name: 'likeVideos',
