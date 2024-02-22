@@ -43,7 +43,7 @@ export const fetchLikedVideos = createAsyncThunk<
 )
 
 export const fetchLikeVideo = createAsyncThunk<
-  boolean,
+  { is_liked: boolean },
   { videoID: string; accessToken: string },
   { rejectValue: string }
 >(
@@ -65,7 +65,7 @@ export const fetchLikeVideo = createAsyncThunk<
 )
 
 export const addLikeVideo = createAsyncThunk<
-  string,
+  { message: string },
   { videoID: string; accessToken: string },
   { rejectValue: string }
 >(
@@ -82,8 +82,7 @@ export const addLikeVideo = createAsyncThunk<
     if (!response.ok) {
       return rejectWithValue('Server error')
     }
-    const data = await response.json()
-    return await data.is_liked
+    return await response.json()
   },
 )
 
@@ -130,11 +129,13 @@ const likeVideosSlice = createSlice({
         state.liked = true
       })
       .addCase(removeLikeVideo.fulfilled, (state, action) => {
-        state.items = state.items.filter((item) => item.id !== action.payload)
+        if (state.items) {
+          state.items = state.items.filter((item) => item.id !== action.payload)
+        }
         state.liked = false
       })
       .addCase(fetchLikeVideo.fulfilled, (state, action) => {
-        state.liked = action.payload
+        state.liked = action.payload.is_liked
         console.log('fetchLikeVideo.fulfilled', action.payload)
       })
   },
