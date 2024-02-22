@@ -16,6 +16,7 @@ interface UserItem {
   deleteFulfilledMessage?: string
   needToPushToHome?: boolean
   needToPushToLogin?: boolean
+  isRefreshingToken?: boolean
 }
 
 const initialState: UserItem = {
@@ -41,6 +42,12 @@ const userSlice = createSlice({
     },
     resetNeedToPushToLogin: (state) => {
       state.needToPushToLogin = false
+    },
+    setIsRefreshingToken: (state) => {
+      state.isRefreshingToken = true
+    },
+    resetIsRefreshingToken: (state) => {
+      state.isRefreshingToken = false
     },
   },
   extraReducers: (builder) => {
@@ -125,6 +132,8 @@ export const {
   setTokensAction,
   resetNeedToPushToHome,
   resetNeedToPushToLogin,
+  resetIsRefreshingToken,
+  setIsRefreshingToken,
 } = userSlice.actions
 
 export default userSlice.reducer

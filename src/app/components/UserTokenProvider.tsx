@@ -2,13 +2,15 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 import { store } from '../redux/store/configureStore'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { refreshTokenAction } from '@/app/redux/slice/user/userSlice/refreshTokenAction'
 import { RootState } from '@/app/redux/store/rootReducer'
 import { useRouter } from 'next/navigation'
 import {
   resetNeedToPushToHome,
   resetNeedToPushToLogin,
+  resetIsRefreshingToken,
+  setIsRefreshingToken,
   setTokensAction,
 } from '../redux/slice/user/userSlice/userSlice'
 
@@ -23,8 +25,13 @@ export default function UserTokenProvider({
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
 
-  const { accessToken, refreshToken, needToPushToHome, needToPushToLogin } =
-    useSelector((state: RootState) => state.user)
+  const {
+    accessToken,
+    refreshToken,
+    needToPushToHome,
+    needToPushToLogin,
+    isRefreshingToken,
+  } = useSelector((state: RootState) => state.user)
 
   const [loadedTokenFromLocalStorage, setLoadedTokenFromLocalStorage] =
     useState<boolean>(false)
@@ -74,9 +81,15 @@ export default function UserTokenProvider({
 
   useEffect(() => {
     if (refreshToken) {
-      dispatch(refreshTokenAction({ refreshToken: refreshToken }))
+      if (isRefreshingToken) {
+        dispatch(resetIsRefreshingToken())
+      } else {
+        dispatch(setIsRefreshingToken())
+        dispatch(refreshTokenAction({ refreshToken: refreshToken }))
+      }
       const interval = setInterval(() => {
         if (refreshToken) {
+          dispatch(setIsRefreshingToken())
           dispatch(refreshTokenAction({ refreshToken: refreshToken }))
         }
       }, 180000) // 180000 milliseconds = 3 minutes
