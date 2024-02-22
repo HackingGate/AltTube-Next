@@ -44,13 +44,17 @@ function WatchInner() {
     (state: RootState) => state.likeVideo.status,
   )
 
-  // Fetch stream data when component mounts
   useEffect(() => {
     if (v && accessToken) {
-      dispatch(fetchStreamResult(v))
       dispatch(fetchLikeVideo({ videoID: v, accessToken: accessToken }))
     }
   }, [dispatch, v, accessToken])
+
+  useEffect(() => {
+    if (v) {
+      dispatch(fetchStreamResult(v))
+    }
+  }, [dispatch, v])
 
   return (
     <div>
